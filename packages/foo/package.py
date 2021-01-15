@@ -1,4 +1,4 @@
 
 name = "foo"
-version = "8"
+version = "9"
 build_command = False
