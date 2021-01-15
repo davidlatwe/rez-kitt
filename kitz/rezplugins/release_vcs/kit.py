@@ -36,7 +36,7 @@ class KitReleaseVCS(git.GitReleaseVCS):
 
     def get_latest_commit(self):
         args = ["rev-list", "HEAD", "-1"]
-        return self.git(*args)
+        return self.git(*args)[0]
 
     def git(self, *nargs):
         if not self.is_kit:
