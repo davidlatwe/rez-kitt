@@ -49,9 +49,11 @@ class KitReleaseVCS(git.GitReleaseVCS):
             return self._cmd(self.executable, *nargs)
 
         if nargs[0] in {"log", "diff-index", "rev-list"}:
+            # run command on current working dir only
             nargs = list(nargs) + ["--", "*"]
 
         elif nargs[:2] == ("tag", "-a"):
+            # add tag on most recent commit that modified current working dir
             latest_commit = self.get_latest_commit()
             nargs = list(nargs) + [latest_commit]
 
