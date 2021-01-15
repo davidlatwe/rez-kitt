@@ -13,8 +13,8 @@ class KitReleaseVCS(git.GitReleaseVCS):
         return "kit"
 
     def __init__(self, pkg_root, vcs_root=None):
-        super(KitReleaseVCS, self).__init__(pkg_root, vcs_root=vcs_root)
         self.is_kit = self.is_valid_kit_root(pkg_root)
+        super(KitReleaseVCS, self).__init__(pkg_root, vcs_root=vcs_root)
 
     @classmethod
     def is_valid_root(cls, path):
@@ -22,7 +22,7 @@ class KitReleaseVCS(git.GitReleaseVCS):
 
     @classmethod
     def is_valid_kit_root(cls, path):
-        return os.path.isdir(os.path.join(path, ".kit"))
+        return os.path.isfile(os.path.join(path, ".kit"))
 
     @classmethod
     def find_vcs_root(cls, path):
@@ -33,7 +33,7 @@ class KitReleaseVCS(git.GitReleaseVCS):
 
     def git(self, *nargs):
         if self.is_kit and nargs[0] in {"log", "diff-index"}:
-            nargs += ["--", "*"]
+            nargs = list(nargs) + ["--", "*"]
         return self._cmd(self.executable, *nargs)
 
 
