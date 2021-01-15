@@ -42,12 +42,10 @@ class KitReleaseVCS(git.GitReleaseVCS):
         if not self.is_kit:
             return self._cmd(self.executable, *nargs)
 
-        cmd = nargs[0]
-
-        if cmd in {"log", "diff-index", "rev-list"}:
+        if nargs[0] in {"log", "diff-index", "rev-list"}:
             nargs = list(nargs) + ["--", "*"]
 
-        elif cmd == "tag":
+        elif nargs[:2] == ("tag", "-a"):
             latest_commit = self.get_latest_commit()
             nargs = list(nargs) + [latest_commit]
 
