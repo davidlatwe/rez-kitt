@@ -27,9 +27,12 @@ class KitReleaseVCS(git.GitReleaseVCS):
     @classmethod
     def find_vcs_root(cls, path):
         result = super(KitReleaseVCS, cls).find_vcs_root(path)
-        if result is not None and cls.is_valid_kit_root(path):
-            return result[0], 0
-        return result
+        if result is not None:
+            vcs_path, levels_up = result
+            if cls.is_valid_kit_root(path):
+                return vcs_path, -1  # pop-up
+            else:
+                return vcs_path, 9999  # or, back down
 
     def git(self, *nargs):
         if self.is_kit and nargs[0] in {"log", "diff-index"}:
