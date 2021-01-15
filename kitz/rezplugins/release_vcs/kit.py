@@ -34,9 +34,23 @@ class KitReleaseVCS(git.GitReleaseVCS):
             else:
                 return vcs_path, 9999  # or, back down
 
+    def get_latest_commit(self):
+        args = ["rev-list", "HEAD", "-1"]
+        return self.git(*args)
+
     def git(self, *nargs):
-        if self.is_kit and nargs[0] in {"log", "diff-index"}:
+        if not self.is_kit:
+            return self._cmd(self.executable, *nargs)
+
+        cmd = nargs[0]
+
+        if cmd in {"log", "diff-index", "rev-list"}:
             nargs = list(nargs) + ["--", "*"]
+
+        elif cmd == "tag":
+            latest_commit = self.get_latest_commit()
+            nargs = list(nargs) + [latest_commit]
+
         return self._cmd(self.executable, *nargs)
 
 
