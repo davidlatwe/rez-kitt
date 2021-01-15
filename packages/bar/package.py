@@ -1,5 +1,5 @@
 
 name = "bar"
-version = "7.5"
+version = "8"
 build_command = False
 # random notes
