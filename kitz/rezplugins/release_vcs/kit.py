@@ -34,6 +34,12 @@ class KitReleaseVCS(git.GitReleaseVCS):
             else:
                 return vcs_path, 9999  # or, back down
 
+    def get_current_revision(self):
+        doc = super(KitReleaseVCS, self).get_current_revision()
+        if self.is_kit:
+            doc["commit"] = self.get_latest_commit()
+        return doc
+
     def get_latest_commit(self):
         args = ["rev-list", "HEAD", "-1"]
         return self.git(*args)[0]
